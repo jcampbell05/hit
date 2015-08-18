@@ -1,6 +1,6 @@
 
 [![Build Status](https://www.bitrise.io/app/df9203eed45bff4a.svg?token=_pWCzt8CMI8GZM5Lofq-Pw&branch=master)](https://www.bitrise.io/app/df9203eed45bff4a)
-[![Swift Version](https://img.shields.io/badge/Swift-Xcode7b5-orange.svg)]
+![Swift Version](https://img.shields.io/badge/Swift-Xcode7b5-orange.svg)
 -----
 # hit
 

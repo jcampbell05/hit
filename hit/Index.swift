@@ -81,11 +81,11 @@ public class Index {
     }
     
     public func updateIndexFromRawStringsAndIdentifiers(pairs: [InputPair], save: Bool,
-        completion: (() -> ())?) {
+        completion: (() -> ())) {
         
         self.operationQueue.addOperationWithBlock { () -> Void in
             self.updateIndexFromRawStringsAndIdentifiers(pairs, save: save)
-            completion?()
+            completion()
         }
     }
     

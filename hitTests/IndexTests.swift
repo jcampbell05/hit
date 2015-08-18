@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 @testable import hit
 
-class IndexTests: ModelTestCase {
+class IndexTests: HitTestCase {
 
     func rangeFromString(string: String, start: Int, count: Int) -> Index.TokenRange {
         let startIndex = string.startIndex

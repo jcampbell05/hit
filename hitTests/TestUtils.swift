@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import hit
 
-class ModelTestCase : XCTestCase {
+class HitTestCase : XCTestCase {
     
     func testingBundle() -> NSBundle {
         return NSBundle(forClass: self.dynamicType)

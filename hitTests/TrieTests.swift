@@ -10,7 +10,7 @@ import UIKit
 import XCTest
 @testable import hit
 
-class TrieTests: ModelTestCase {
+class TrieTests: HitTestCase {
 
     func testTrieCreation_exactMatches() {
         

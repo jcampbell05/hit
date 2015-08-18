@@ -46,10 +46,20 @@ let results = index.prefixSearch("scar")
 */
 ```
 
-Turns out we got two. One from Sarah about **Scar**y Movie and the other one from John about, right that's the ridiculous one, well, read it yourself:
+Turns out we got two. One from Sarah about **Scar**y Movie:
 
+```swift
+Icecream always makes me think of Scary Movie. Get it? I scream?
+                                  |---|
+                                  34 39
 ```
+
+and another one from John about, right that's the ridiculous one, well, read it yourself:
+
+```swift
 Who is not been scarred by love has not lived.
+                |-----|
+                16   23
 ```
 
 Cool (?), our results actually tell us that he used the exact word **scar**red in the range of `16..<23`. That would be useful to know if we wanted to highlight the word itself.

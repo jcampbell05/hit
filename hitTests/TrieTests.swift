@@ -8,7 +8,7 @@
 
 import UIKit
 import XCTest
-import hit
+@testable import hit
 
 class TrieTests: ModelTestCase {
 

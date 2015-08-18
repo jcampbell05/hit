@@ -8,7 +8,7 @@
 
 # features
 - fast prefix search
-- even faster exact-match search
+- even faster exact word-match search
 - TODO: map reduce with GCD for best performance
 
 # author

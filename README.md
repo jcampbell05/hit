@@ -15,7 +15,8 @@
 Let's say you have a list of funny quotes from all yours friends and you suddenly remember that there's a gem mentioning a 'scar'. Instead of having to go through all your friends' quotes one by one until you find it, use `hit` instead! Just run your data to get an `Index` and then ask it to give you back *who*'s responsible for that quote and in *what context* it was said.
 
 Let's look at our data
-```
+
+```swift
 let quotes = [
     (string: "Hasta la Pizza, baby", identifier: "Dino"),
     (string: "Sorry I'm late, my car aborted half way to work", identifier: "Rob"),
@@ -32,7 +33,7 @@ index.updateIndexFromRawStringsAndIdentifiers(quotes, save: false)
 
 and we remember that someone said something ridiculously cheezy about `scars`, let's go for it and search for `scar`, hoping we'll get a hit.
 
-```
+```swift
 //search for stuff!
 let results = index.prefixSearch("scar")
 

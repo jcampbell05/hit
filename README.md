@@ -1,6 +1,6 @@
 # hit
 
-[![Build Status](https://www.bitrise.io/app/df9203eed45bff4a.svg?token=_pWCzt8CMI8GZM5Lofq-Pw&branch=master)](https://www.bitrise.io/app/df9203eed45bff4a) ![Swift Version](https://img.shields.io/badge/Swift-Xcode7b5-orange.svg)
+[![Build Status](https://www.bitrise.io/app/df9203eed45bff4a.svg?token=_pWCzt8CMI8GZM5Lofq-Pw&branch=master)](https://www.bitrise.io/app/df9203eed45bff4a) [![CocoaPods Spec](https://img.shields.io/cocoapods/v/hit.svg)](https://cocoapods.org/pods/hit) ![Swift Version](https://img.shields.io/badge/Swift-Xcode7b5-orange.svg)
 
 ###### Lightweight full-text search written in Swift.
 

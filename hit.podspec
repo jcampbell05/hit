@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "hit"
-  s.version      = "0.1"
+  s.version      = "0.2"
   s.summary      = "Lightweight full-text search written in Swift"
 
   s.description  = <<-DESC
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.10"
   s.watchos.deployment_target = "2.0"
-  s.source       = { :git => "https://github.com/czechboy0/hit.git", :tag => "v0.1" }
+  s.source       = { :git => "https://github.com/czechboy0/hit.git", :tag => "v#{s.version}" }
   s.source_files  = "hit/*.{swift}"
   s.requires_arc = true
 

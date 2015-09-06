@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "hit"
-  s.version      = "0.2"
+  s.version      = "0.3"
   s.summary      = "Lightweight full-text search written in Swift"
 
   s.description  = <<-DESC

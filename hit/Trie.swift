@@ -53,14 +53,15 @@ public struct Trie {
         
         let prefixHeadRange = TokenRange(start: prefix.startIndex, end: prefix.startIndex.advancedBy(1))
         let prefixHead = prefix.substringWithRange(prefixHeadRange)
-        
-        if length == 1 {
+        let emptyTrie = trie.token.characters.count == 0
+
+        if length == 1 && !emptyTrie {
+            
             //potentially might be found if trie matches
             let match = (trie.token == prefixHead)
             return match ? trie : nil
         }
         
-        let emptyTrie = trie.token.characters.count == 0
         let tokenMatches = trie.token == prefixHead
         if emptyTrie || tokenMatches {
             

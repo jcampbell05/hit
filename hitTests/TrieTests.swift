@@ -11,10 +11,14 @@ import XCTest
 @testable import hit
 
 class TrieTests: HitTestCase {
-
+    
+    func commonWords() -> [String] {
+        let strings = ["swiftkey", "swype", "hello", "london", "reality", "fantasy", "stuff"]
+        return strings
+    }
+    
     func testTrieCreation_exactMatches() {
-        
-        let strings = ["swiftkey", "swype", "hello", "london", "reality", "fantasy"]
+        let strings = self.commonWords()
         let trie = Trie(strings: strings)
         
         let foundStrings = trie.stringsMatchingPrefix("sw")
@@ -53,6 +57,17 @@ class TrieTests: HitTestCase {
         self.measureBlock { () -> Void in
             _ = trie.stringsMatchingPrefix("sw")
         }
+    }
+    
+    func testCorrectness_singleCharSearch() {
+        let strings = self.commonWords()
+        let trie = Trie(strings: strings)
+        
+        let foundStrings = Set(trie.stringsMatchingPrefix("s"))
+        XCTAssertEqual(foundStrings.count, 3)
+        XCTAssert(foundStrings.contains("swiftkey"))
+        XCTAssert(foundStrings.contains("swype"))
+        XCTAssert(foundStrings.contains("stuff"))
     }
 
     

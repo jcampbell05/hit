@@ -296,7 +296,7 @@ public class Index {
         self.indexStorage = self.mergeIndexData(self.indexStorage, two: newData)
         
         //recreate the Trie (TODO: don't recreate the whole thing, make it easier to append to the existing Trie)
-        self.trieStorage = Trie(strings: self.indexStorage.keys.array)
+        self.trieStorage = Trie(strings: Array(self.indexStorage.keys))
         
         if save {
             self.save()

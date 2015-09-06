@@ -29,7 +29,7 @@ class ExampleTests: HitTestCase {
         index.updateIndexFromRawStringsAndIdentifiers(quotes, save: false)
         
         //search for stuff!
-        let results = index.prefixSearch("scar")
+        _ = index.prefixSearch("scar")
         /*
         *   -> 2 results : [
         *                       "scary" -> [ "Sarah" : Range(34..<39) ],

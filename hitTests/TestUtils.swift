@@ -47,7 +47,7 @@ class HitTestCase : XCTestCase {
         let pairs = self.pairify(try self.parseTestingData())
         let index = Index()
         let indexData = index.createIndexFromRawStringsAndIdentifiers(pairs)
-        let tokens = indexData.keys.array
+        let tokens = Array(indexData.keys)
         return tokens
     }
 

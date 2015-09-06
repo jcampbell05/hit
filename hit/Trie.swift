@@ -51,7 +51,7 @@ public struct Trie {
         let length = prefix.characters.count
         assert(length > 0, "Invalid arg: cannot be empty string")
         
-        let prefixHeadRange = TokenRange(start: prefix.startIndex, end: advance(prefix.startIndex, 1))
+        let prefixHeadRange = TokenRange(start: prefix.startIndex, end: prefix.startIndex.advancedBy(1))
         let prefixHead = prefix.substringWithRange(prefixHeadRange)
         
         if length == 1 {
@@ -80,7 +80,7 @@ public struct Trie {
     static func pullStringsFromTrie(trie: TrieNode) -> [String] {
         
         let token = trie.token
-        let subnodes = trie.subnodes.values.array
+        let subnodes = Array(trie.subnodes.values)
         let endsWord = trie.endsWord
 
         //get substrings of subnodes
@@ -133,7 +133,7 @@ public struct Trie {
     
     static func createTrieFromString(string: String) -> TrieNode {
         
-        let headRange = TokenRange(start: string.startIndex, end: advance(string.startIndex, 1))
+        let headRange = TokenRange(start: string.startIndex, end: string.startIndex.advancedBy(1))
         let head = string.substringWithRange(headRange)
         
         let length = string.characters.count

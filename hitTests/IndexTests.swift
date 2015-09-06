@@ -14,7 +14,9 @@ class IndexTests: HitTestCase {
 
     func rangeFromString(string: String, start: Int, count: Int) -> Index.TokenRange {
         let startIndex = string.startIndex
-        let range = Index.TokenRange(start: advance(startIndex, start), end: advance(startIndex, start + count))
+        let st = startIndex.advancedBy(start)
+        let en = startIndex.advancedBy(start + count)
+        let range = Index.TokenRange(start: st, end: en)
         return range
     }
     
@@ -162,7 +164,7 @@ class IndexTests: HitTestCase {
             let expected = ["swipe", "swype", "swiping", "swiftkey", "switched", "switch"]
             
             if results.count != expected.count {
-                XCTFail("Mismatch of count. Expected: \(expected), Received: \(resultsMap.keys.array)")
+                XCTFail("Mismatch of count. Expected: \(expected), Received: \(Array(resultsMap.keys))")
             } else {
                 
                 for expectedToken in expected {

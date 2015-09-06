@@ -1,5 +1,8 @@
 # Change Log
 
+## [v0.3](https://github.com/czechboy0/hit/tree/v0.3) (2015-09-06)
+[Full Changelog](https://github.com/czechboy0/hit/compare/v0.2...v0.3)
+
 ## [v0.2](https://github.com/czechboy0/hit/tree/v0.2) (2015-09-06)
 [Full Changelog](https://github.com/czechboy0/hit/compare/v0.1...v0.2)
 

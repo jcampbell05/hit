@@ -66,7 +66,7 @@ public struct Trie {
         if emptyTrie || tokenMatches {
             
             //compute tail - the whole prefix if this was an empty trie
-            let prefixTail = emptyTrie ? prefix : prefix.substring(from: prefixHeadRange.upperBound)
+            let prefixTail = emptyTrie ? prefix : String(prefix[prefixHeadRange.upperBound...])
             
             //look into subnodes
             for subnode in trie.subnodes.values {
@@ -135,11 +135,11 @@ public struct Trie {
     static func createTrieFromString(_ string: String) -> TrieNode {
         
         let headRange = (string.startIndex ..< string.index(string.startIndex, offsetBy: 1))
-        let head = string.substring(with: headRange)
+        let head = String(string[headRange])
         
         let length = string.count
         if length > 1 {
-            let tail = string.substring(from: headRange.upperBound)
+            let tail = String(string[headRange.upperBound...])
             let subtrie = self.createTrieFromString(tail)
             let subnodes = [subtrie.token: subtrie]
             

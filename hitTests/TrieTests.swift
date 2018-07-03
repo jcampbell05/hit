@@ -22,8 +22,8 @@ class TrieTests: HitTestCase {
         let trie = Trie(strings: strings)
         
         let foundStrings = trie.stringsMatchingPrefix("sw")
-        XCTAssert(foundStrings.indexOf("swiftkey") != nil, "Couldn't find 'swiftkey' in results")
-        XCTAssert(foundStrings.indexOf("swype") != nil, "Couldn't find 'swiftkey' in results")
+        XCTAssert(foundStrings.index(of: "swiftkey") != nil, "Couldn't find 'swiftkey' in results")
+        XCTAssert(foundStrings.index(of: "swype") != nil, "Couldn't find 'swiftkey' in results")
     }
     
     
@@ -33,7 +33,7 @@ class TrieTests: HitTestCase {
         let resultTokens = trie.exportTrie()
         
         for token in tokens {
-            if resultTokens.indexOf(token) == nil {
+            if resultTokens.index(of: token) == nil {
                 XCTFail("Didn't return token \(token)")
             }
         }
@@ -44,7 +44,7 @@ class TrieTests: HitTestCase {
         
         let tokens = try! self.prepTokensForTrieTesting()
         
-        self.measureBlock { () -> Void in
+        self.measure { () -> Void in
             _ = Trie(strings: tokens)
         }
     }
@@ -54,7 +54,7 @@ class TrieTests: HitTestCase {
         let tokens = try! self.prepTokensForTrieTesting()
         let trie = Trie(strings: tokens)
 
-        self.measureBlock { () -> Void in
+        self.measure { () -> Void in
             _ = trie.stringsMatchingPrefix("sw")
         }
     }

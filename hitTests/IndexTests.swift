@@ -12,11 +12,11 @@ import XCTest
 
 class IndexTests: HitTestCase {
 
-    func rangeFromString(string: String, start: Int, count: Int) -> Index.TokenRange {
+    func rangeFromString(_ string: String, start: Int, count: Int) -> Index.TokenRange {
         let startIndex = string.startIndex
-        let st = startIndex.advancedBy(start)
-        let en = startIndex.advancedBy(start + count)
-        let range = Index.TokenRange(start: st, end: en)
+        let st = startIndex.index(startIndex, offsetBy: start)
+        let en = startIndex.index(startIndex, offsetBy: start + count)
+        let range = (st ..< en)
         return range
     }
     
@@ -34,7 +34,7 @@ class IndexTests: HitTestCase {
             (string: string2, identifier: identifier2)
         ]
         
-        let exp = self.expectationWithDescription("index search")
+        let exp = self.expectation(description: "index search")
 
         index.updateIndexFromRawStringsAndIdentifiers(pairs, save: false) {
             
@@ -74,7 +74,7 @@ class IndexTests: HitTestCase {
             })
         }
         
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(timeout: 10, handler: nil)
     }
     
     //watch out - this might take minutes, runs the whole thing 10 times and the data is pretty large
@@ -83,14 +83,14 @@ class IndexTests: HitTestCase {
         
         let data = try! self.parseTestingData()
 
-        self.measureBlock { () -> Void in
+        self.measure { () -> Void in
             let index = Index()
             let pairs = self.pairify(data)
-            let exp = self.expectationWithDescription("updated")
+            let exp = self.expectation(description: "updated")
             index.updateIndexFromRawStringsAndIdentifiers(pairs, save: false, completion: { () -> () in
                 exp.fulfill()
             })
-            self.waitForExpectationsWithTimeout(10, handler: nil)
+            self.waitForExpectations(timeout: 10, handler: nil)
         }
     }
     
@@ -128,7 +128,7 @@ class IndexTests: HitTestCase {
 
         let indices = index.createIndicesFromRawStringsAndIdentifiers(pairs)
         
-        self.measureBlock { () -> Void in
+        self.measure { () -> Void in
             
             _ = index.reduceMerge(indices)
         }
@@ -142,7 +142,7 @@ class IndexTests: HitTestCase {
         
         let indices = index.createIndicesFromRawStringsAndIdentifiers(pairs)
         
-        self.measureBlock { () -> Void in
+        self.measure { () -> Void in
             
             _ = index.binaryMerge(indices)
         }
@@ -153,7 +153,7 @@ class IndexTests: HitTestCase {
         let pairs = self.pairify(try! self.parseTestingData())
         let index = Index()
         
-        let exp = self.expectationWithDescription("updated")
+        let exp = self.expectation(description: "updated")
         index.updateIndexFromRawStringsAndIdentifiers(pairs, save: false, completion: {
             
             //try to search for swiftkey by typing "sw"
@@ -178,7 +178,7 @@ class IndexTests: HitTestCase {
             //if it went through, we're all good
             exp.fulfill()
         })
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(timeout: 10, handler: nil)
     }
 
     

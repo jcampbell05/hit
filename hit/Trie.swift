@@ -30,8 +30,8 @@ public struct Trie {
         return Trie.pullStringsFromTrie(self.root)
     }
     
-    public func stringsMatchingPrefix(prefix: String) -> [String] {
-        let normalized = prefix.lowercaseString
+    public func stringsMatchingPrefix(_ prefix: String) -> [String] {
+        let normalized = prefix.lowercased()
         if let trieRoot = Trie.findTrieEndingPrefix(normalized, trie: self.root) {
             let strings = Trie.pullStringsFromTrie(trieRoot)
             let stringsWithPrefix = strings.map {
@@ -46,13 +46,13 @@ public struct Trie {
         return [String]()
     }
     
-    static func findTrieEndingPrefix(prefix: String, trie: TrieNode) -> TrieNode? {
+    static func findTrieEndingPrefix(_ prefix: String, trie: TrieNode) -> TrieNode? {
         
         let length = prefix.characters.count
         assert(length > 0, "Invalid arg: cannot be empty string")
         
-        let prefixHeadRange = TokenRange(start: prefix.startIndex, end: prefix.startIndex.advancedBy(1))
-        let prefixHead = prefix.substringWithRange(prefixHeadRange)
+        let prefixHeadRange = (prefix.startIndex ..< prefix.characters.index(prefix.startIndex, offsetBy: 1))
+        let prefixHead = prefix.substring(with: prefixHeadRange)
         let emptyTrie = trie.token.characters.count == 0
 
         if length == 1 && !emptyTrie {
@@ -66,7 +66,7 @@ public struct Trie {
         if emptyTrie || tokenMatches {
             
             //compute tail - the whole prefix if this was an empty trie
-            let prefixTail = emptyTrie ? prefix : prefix.substringFromIndex(prefixHeadRange.endIndex)
+            let prefixTail = emptyTrie ? prefix : prefix.substring(from: prefixHeadRange.upperBound)
             
             //look into subnodes
             for subnode in trie.subnodes.values {
@@ -78,7 +78,7 @@ public struct Trie {
         return nil
     }
     
-    static func pullStringsFromTrie(trie: TrieNode) -> [String] {
+    static func pullStringsFromTrie(_ trie: TrieNode) -> [String] {
         
         let token = trie.token
         let subnodes = Array(trie.subnodes.values)
@@ -107,13 +107,13 @@ public struct Trie {
         return substrings
     }
     
-    static func createTrieFromStrings(strings: [String]) -> TrieNode {
+    static func createTrieFromStrings(_ strings: [String]) -> TrieNode {
         
         let tries = strings.map {
             (string: String) -> TrieNode in
             
             //normalize first
-            let normalized = string.lowercaseString
+            let normalized = string.lowercased()
             let trie = Trie.createTrieFromString(normalized)
             return trie
         }
@@ -132,14 +132,14 @@ public struct Trie {
         return resultTrie
     }
     
-    static func createTrieFromString(string: String) -> TrieNode {
+    static func createTrieFromString(_ string: String) -> TrieNode {
         
-        let headRange = TokenRange(start: string.startIndex, end: string.startIndex.advancedBy(1))
-        let head = string.substringWithRange(headRange)
+        let headRange = (string.startIndex ..< string.characters.index(string.startIndex, offsetBy: 1))
+        let head = string.substring(with: headRange)
         
         let length = string.characters.count
         if length > 1 {
-            let tail = string.substringFromIndex(headRange.endIndex)
+            let tail = string.substring(from: headRange.upperBound)
             let subtrie = self.createTrieFromString(tail)
             let subnodes = [subtrie.token: subtrie]
             
@@ -149,7 +149,7 @@ public struct Trie {
         }
     }
 
-    static func leafTrie(token: String) -> TrieNode {
+    static func leafTrie(_ token: String) -> TrieNode {
         return TrieNode(token: token, endsWord: true, subnodes: SubTries())
     }
     
@@ -157,7 +157,7 @@ public struct Trie {
         return TrieNode(token: "", endsWord: false, subnodes: SubTries())
     }
     
-    static func mergeTries(left left: TrieNode, right: TrieNode) -> TrieNode {
+    static func mergeTries(left: TrieNode, right: TrieNode) -> TrieNode {
         
         assert(left.token == right.token, "Mergable tries need to have the same token")
         

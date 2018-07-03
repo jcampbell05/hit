@@ -12,11 +12,11 @@ import hit
 
 class HitTestCase : XCTestCase {
     
-    func testingBundle() -> NSBundle {
-        return NSBundle(forClass: self.dynamicType)
+    func testingBundle() -> Bundle {
+        return Bundle(for: type(of: self))
     }
     
-    func pairify(data: [String: String]) -> [Index.InputPair] {
+    func pairify(_ data: [String: String]) -> [Index.InputPair] {
         var pairs = Array<Index.InputPair>()
         for (identifier, content) in data {
             pairs.append((string: content, identifier: identifier))
@@ -24,7 +24,7 @@ class HitTestCase : XCTestCase {
         return pairs
     }
     
-    func mapify(pairs: [Index.TokenIndexPair]) -> Index.IndexData {
+    func mapify(_ pairs: [Index.TokenIndexPair]) -> Index.IndexData {
         
         var result = Index.IndexData()
         for item in pairs {
@@ -35,10 +35,10 @@ class HitTestCase : XCTestCase {
     
     func parseTestingData() throws -> [String: String] {
         
-        let jsonUrl = self.testingBundle().URLForResource("reviewTestingData", withExtension: "json")
+        let jsonUrl = self.testingBundle().url(forResource: "reviewTestingData", withExtension: "json")
         
-        let data = try NSData(contentsOfURL: jsonUrl!, options: NSDataReadingOptions())
-        let testingData = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as! [String: String]
+        let data = try Data(contentsOf: jsonUrl!, options: NSData.ReadingOptions())
+        let testingData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as! [String: String]
         
         return testingData
     }

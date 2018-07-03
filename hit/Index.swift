@@ -30,7 +30,7 @@ So that when we find it, we can directly find that word at the specified range.
 The indexing itself will run in a map-reduce manner - indexing will run in multiple jobs
 and only when done we merge all results into the new index.
 */
-public class Index {
+open class Index {
     
     public typealias InputPair = (string: String, identifier: String)
     public typealias TokenRange = Range<String.Index>
@@ -39,58 +39,58 @@ public class Index {
     public typealias TokenIndexPair = (token: String, data: TokenIndexData)
     public typealias IndexData = [String: TokenIndexData]
     
-    private var indexStorage: IndexData = [:]
-    private var trieStorage: Trie = Trie(strings: [String]())
-    private let operationQueue: NSOperationQueue
+    fileprivate var indexStorage: IndexData = [:]
+    fileprivate var trieStorage: Trie = Trie(strings: [String]())
+    fileprivate let operationQueue: OperationQueue
     
     public init() {
         
-        self.operationQueue = NSOperationQueue()
+        self.operationQueue = OperationQueue()
         
         //load from storage
         self.load()
     }
     
-    private func load() -> Bool {
+    fileprivate func load() -> Bool {
         //TODO: load from disk here
         return true
     }
     
-    private func save() -> Bool {
+    fileprivate func save() -> Bool {
         //TODO: save to disk here
         return true
     }
     
     //PUBLIC API
     
-    public func occurencesOfToken(token: String, completion: (result: TokenIndexData?) -> ())  {
+    open func occurencesOfToken(_ token: String, completion: @escaping (_ result: TokenIndexData?) -> ())  {
         
         let normalizedToken = self.normalizedToken(token)
-        self.operationQueue.addOperationWithBlock { () -> Void in
+        self.operationQueue.addOperation { () -> Void in
             let result = self.indexStorage[normalizedToken]
-            completion(result: result)
+            completion(result)
         }
     }
     
-    public func occurencesOfTokensWithPrefix(prefix: String, completion: (result: [TokenIndexPair]) -> ())  {
+    open func occurencesOfTokensWithPrefix(_ prefix: String, completion: @escaping (_ result: [TokenIndexPair]) -> ())  {
         
-        self.operationQueue.addOperationWithBlock { () -> Void in
+        self.operationQueue.addOperation { () -> Void in
             let result = self.prefixSearch(prefix)
-            completion(result: result)
+            completion(result)
         }
     }
     
-    public func updateIndexFromRawStringsAndIdentifiers(pairs: [InputPair], save: Bool,
-        completion: (() -> ())) {
+    open func updateIndexFromRawStringsAndIdentifiers(_ pairs: [InputPair], save: Bool,
+        completion: @escaping (() -> ())) {
         
-        self.operationQueue.addOperationWithBlock { () -> Void in
+        self.operationQueue.addOperation { () -> Void in
             self.updateIndexFromRawStringsAndIdentifiers(pairs, save: save)
             completion()
         }
     }
     
     //returns when done, synchronous version
-    public func updateIndexFromRawStringsAndIdentifiers(pairs: [InputPair], save: Bool) {
+    open func updateIndexFromRawStringsAndIdentifiers(_ pairs: [InputPair], save: Bool) {
         let newIndex = self.createIndexFromRawStringsAndIdentifiers(pairs)
         self.mergeNewDataIn(newIndex, save: save)
     }
@@ -98,7 +98,7 @@ public class Index {
     //try to hide the stuff below for testing eyes only
     
     //TODO: add an enum with a sort type - by Total Occurences, Length, Unique Review Occurences, ...
-    public func prefixSearch(prefix: String) -> [TokenIndexPair] {
+    open func prefixSearch(_ prefix: String) -> [TokenIndexPair] {
         
         let normalizedPrefix = self.normalizedToken(prefix)
         if normalizedPrefix.characters.count < 2 {
@@ -114,7 +114,7 @@ public class Index {
         
         //now sort them by length (I think that makes sense for prefix search - shortest match is the best)
         //if two are of the same length, sort those two alphabetically
-        let sortedByLength = filtered.sort() {
+        let sortedByLength = filtered.sorted() {
             (s1: String, s2: String) -> Bool in
             
             let count1 = s1.characters.count
@@ -122,7 +122,7 @@ public class Index {
             
             if count1 == count2 {
                 //now decide by alphabet
-                return s1.localizedCaseInsensitiveCompare(s2) == NSComparisonResult.OrderedAscending
+                return s1.localizedCaseInsensitiveCompare(s2) == ComparisonResult.orderedAscending
             }
             
             return count1 < count2
@@ -135,20 +135,20 @@ public class Index {
         return result
     }
     
-    public func createIndexFromRawStringsAndIdentifiers(pairs: [InputPair]) -> IndexData {
+    open func createIndexFromRawStringsAndIdentifiers(_ pairs: [InputPair]) -> IndexData {
         let flattened = self.createIndicesFromRawStringsAndIdentifiers(pairs)
         let merged = self.binaryMerge(flattened)
         return merged
     }
     
-    public func createIndicesFromRawStringsAndIdentifiers(pairs: [InputPair]) -> [IndexData] {
+    open func createIndicesFromRawStringsAndIdentifiers(_ pairs: [InputPair]) -> [IndexData] {
         let flattened = pairs.reduce([IndexData]()) { (arr, item) -> [IndexData] in
             return arr + self.createIndicesFromRawString(item.string, identifier: item.identifier)
         }
         return flattened
     }
     
-    private func threadSafeGetStorage() -> (index: IndexData, trie: Trie) {
+    fileprivate func threadSafeGetStorage() -> (index: IndexData, trie: Trie) {
         objc_sync_enter(self)
         let indexStorage = self.indexStorage
         let trieStorage = self.trieStorage
@@ -159,7 +159,7 @@ public class Index {
     public typealias ViewTokenCount = (token: String, count: Int)
     
     //aka number of occurences total
-    public func viewOfTokensSortedByNumberOfOccurences() -> [ViewTokenCount] {
+    open func viewOfTokensSortedByNumberOfOccurences() -> [ViewTokenCount] {
         
         let (indexStorage, _) = self.threadSafeGetStorage()
         
@@ -176,13 +176,13 @@ public class Index {
         }
         
         //sort by number of occurences
-        view.sortInPlace() { $0.count >= $1.count }
+        view.sort() { $0.count >= $1.count }
         
         return view
     }
 
     //aka number of reviews mentioning this word (doesn't matter how many times in one review)
-    public func viewOfTokensSortedByNumberOfUniqueIdentifierOccurences() -> [ViewTokenCount] {
+    open func viewOfTokensSortedByNumberOfUniqueIdentifierOccurences() -> [ViewTokenCount] {
         
         objc_sync_enter(self)
         let indexStorage = self.indexStorage
@@ -198,19 +198,19 @@ public class Index {
         }
         
         //sort by number of occurences
-        view.sortInPlace { $0.count >= $1.count }
+        view.sort { $0.count >= $1.count }
         
         return view
     }
     
-    public func createIndicesFromRawString(string: String, identifier: String) -> [IndexData] {
+    open func createIndicesFromRawString(_ string: String, identifier: String) -> [IndexData] {
         
         //iterate through the string
         var newIndices = [IndexData]()
         
-        let range: Range<String.Index> = TokenRange(start: string.startIndex, end: string.endIndex)
-        let options = NSStringEnumerationOptions([.Localized, .ByWords])
-        string.enumerateSubstringsInRange(range, options: options) { (substring, substringRange, enclosingRange, stop) -> () in
+        let range = string.characters.startIndex..<string.characters.endIndex
+        let options = String.EnumerationOptions([.localized, .byWords])
+        string.enumerateSubstrings(in: range, options: options) { (substring, substringRange, enclosingRange, stop) -> () in
             
             guard let substring = substring else { return }
             
@@ -221,7 +221,7 @@ public class Index {
         return newIndices
     }
     
-    public func createIndexFromRawString(string: String, identifier: String) -> IndexData {
+    open func createIndexFromRawString(_ string: String, identifier: String) -> IndexData {
         
         let newIndices = self.createIndicesFromRawString(string, identifier: identifier)
 
@@ -233,7 +233,7 @@ public class Index {
         return reduced
     }
     
-    public func reduceMerge(indexDataArray: [IndexData]) -> IndexData {
+    open func reduceMerge(_ indexDataArray: [IndexData]) -> IndexData {
         
         //ok, now we have an array of new indices, merge them into one and return
         //This was pretty slow due to the first index getting large towards the end
@@ -246,7 +246,7 @@ public class Index {
     /**
     Merges index data in pairs instead of having one big rolling index that every new one is merged with.
     */
-    public func binaryMerge(indexDataArray: [IndexData]) -> IndexData {
+    open func binaryMerge(_ indexDataArray: [IndexData]) -> IndexData {
         
         //termination condition 1
         if indexDataArray.count == 1 {
@@ -269,7 +269,7 @@ public class Index {
             temp.append(indexDataArray[i])
             if second {
                 let merged = self.binaryMerge(temp)
-                temp.removeAll(keepCapacity: true)
+                temp.removeAll(keepingCapacity: true)
                 newIndexDataArray.append(merged)
             }
         }
@@ -282,14 +282,14 @@ public class Index {
         return self.binaryMerge(newIndexDataArray)
     }
     
-    private func createIndexFromToken(token: String, range: TokenRange, identifier: String) -> IndexData {
+    fileprivate func createIndexFromToken(_ token: String, range: TokenRange, identifier: String) -> IndexData {
         
         let normalizedToken = self.normalizedToken(token)
         return [ normalizedToken: [ identifier: [range] ] ]
     }
     
     //this allows us to have multithreaded indexing and only at the end modify shared state :)
-    private func mergeNewDataIn(newData: IndexData, save: Bool) {
+    fileprivate func mergeNewDataIn(_ newData: IndexData, save: Bool) {
         
         //merge these two structures together and keep the result
         objc_sync_enter(self)
@@ -304,15 +304,15 @@ public class Index {
         objc_sync_exit(self)
     }
     
-    private func normalizedToken(found: String) -> String {
+    fileprivate func normalizedToken(_ found: String) -> String {
         
         //just lowercase
-        return found.lowercaseString
+        return found.lowercased()
     }
     
 }
 
-public func isDictionaryEqualToDictionary<Key, Value>(lhs: [Key: Value], rhs: [Key: Value], compareValues: (lhs: Value, rhs: Value) -> Bool) -> (Bool, (key: Key, values: [Value?])?) {
+public func isDictionaryEqualToDictionary<Key, Value>(_ lhs: [Key: Value], rhs: [Key: Value], compareValues: (_ lhs: Value, _ rhs: Value) -> Bool) -> (Bool, (key: Key, values: [Value?])?) {
     
     if lhs.count != rhs.count {
         return (false, nil)
@@ -321,7 +321,7 @@ public func isDictionaryEqualToDictionary<Key, Value>(lhs: [Key: Value], rhs: [K
     //keys are the same, we have to go through them one by one
     for (key, value) in lhs {
         if let rightValue = rhs[key] {
-            if compareValues(lhs: value, rhs: rightValue) {
+            if compareValues(value, rightValue) {
                 //keeping your hopes up, still might be equal
                 continue
             }
@@ -333,7 +333,7 @@ public func isDictionaryEqualToDictionary<Key, Value>(lhs: [Key: Value], rhs: [K
     return (true, nil)
 }
 
-public func isIndexDataEqualToIndexData(lhs: Index.IndexData, rhs: Index.IndexData) -> Bool {
+public func isIndexDataEqualToIndexData(_ lhs: Index.IndexData, rhs: Index.IndexData) -> Bool {
     
     let (equal, _) = isDictionaryEqualToDictionary(lhs, rhs: rhs) { (lhsIn, rhsIn) -> Bool in
         
@@ -348,28 +348,28 @@ public func isIndexDataEqualToIndexData(lhs: Index.IndexData, rhs: Index.IndexDa
 //merging
 extension Index {
     
-    private func mergeIndexData(one: IndexData, two: IndexData) -> IndexData {
+    fileprivate func mergeIndexData(_ one: IndexData, two: IndexData) -> IndexData {
         
         return Dictionary.merge(one, two: two, merge: { (one, two) -> TokenIndexData in
             return self.mergeTokenIndexData(one, two: two)
         })
     }
 
-    private func mergeTokenIndexData(one: TokenIndexData, two: TokenIndexData) -> TokenIndexData {
+    fileprivate func mergeTokenIndexData(_ one: TokenIndexData, two: TokenIndexData) -> TokenIndexData {
         
         return Dictionary.merge(one, two: two, merge: { (one, two) -> TokenRangeArray in
             return self.mergeTokenRangeArrays(one, two: two)
         })
     }
     
-    private func mergeTokenRangeArrays(one: TokenRangeArray, two: TokenRangeArray) -> TokenRangeArray {
+    fileprivate func mergeTokenRangeArrays(_ one: TokenRangeArray, two: TokenRangeArray) -> TokenRangeArray {
         
         //merge arrays
         //1. concat
         let both = one + two
         
         //2. sort
-        let sorted = both.sort() { $0.startIndex <= $1.startIndex }
+        let sorted = both.sorted() { $0.lowerBound <= $1.lowerBound }
         
         //3. remove duplicates
         let result = sorted.reduce(TokenRangeArray()) { (arr, range) -> TokenRangeArray in
@@ -390,14 +390,15 @@ extension Index {
 
 extension Dictionary {
     
-    static func merge(var one: [Key:Value], var two: [Key:Value], merge: (one: Value, two: Value) -> Value) -> [Key:Value] {
+    static func merge(_ one: [Key:Value], two: [Key:Value], merge: (_ one: Value, _ two: Value) -> Value) -> [Key:Value] {
+        var one = one, two = two
         
         //iterate over one, take the unique ones immediately, merge the ones that are also in two
         for (key, oneValue) in one {
-            if let twoValue = two.removeValueForKey(key) {
+            if let twoValue = two.removeValue(forKey: key) {
                 //two has a value for key
                 //merge the values and add that
-                one[key] = merge(one: oneValue, two: twoValue)
+                one[key] = merge(oneValue, twoValue)
             }
             //else, was unique in one, keep it there
         }

@@ -14,8 +14,8 @@ class IndexTests: HitTestCase {
 
     func rangeFromString(_ string: String, start: Int, count: Int) -> Index.TokenRange {
         let startIndex = string.startIndex
-        let st = startIndex.index(startIndex, offsetBy: start)
-        let en = startIndex.index(startIndex, offsetBy: start + count)
+        let st = string.index(startIndex, offsetBy: start)
+        let en = string.index(st, offsetBy: count)
         let range = (st ..< en)
         return range
     }

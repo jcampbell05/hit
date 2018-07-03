@@ -39,7 +39,7 @@ public struct Trie {
                 
                 //here we take the last char out of the prefix, because it's already contained
                 //in the found trie.
-                return String(normalized.characters.dropLast()) + s
+                return String(normalized.dropLast()) + s
             }
             return stringsWithPrefix
         }
@@ -48,12 +48,12 @@ public struct Trie {
     
     static func findTrieEndingPrefix(_ prefix: String, trie: TrieNode) -> TrieNode? {
         
-        let length = prefix.characters.count
+        let length = prefix.count
         assert(length > 0, "Invalid arg: cannot be empty string")
         
-        let prefixHeadRange = (prefix.startIndex ..< prefix.characters.index(prefix.startIndex, offsetBy: 1))
-        let prefixHead = prefix.substring(with: prefixHeadRange)
-        let emptyTrie = trie.token.characters.count == 0
+        let prefixHeadRange = (prefix.startIndex ..< prefix.index(prefix.startIndex, offsetBy: 1))
+        let prefixHead = prefix[prefixHeadRange]
+        let emptyTrie = trie.token.count == 0
 
         if length == 1 && !emptyTrie {
             
@@ -134,10 +134,10 @@ public struct Trie {
     
     static func createTrieFromString(_ string: String) -> TrieNode {
         
-        let headRange = (string.startIndex ..< string.characters.index(string.startIndex, offsetBy: 1))
+        let headRange = (string.startIndex ..< string.index(string.startIndex, offsetBy: 1))
         let head = string.substring(with: headRange)
         
-        let length = string.characters.count
+        let length = string.count
         if length > 1 {
             let tail = string.substring(from: headRange.upperBound)
             let subtrie = self.createTrieFromString(tail)

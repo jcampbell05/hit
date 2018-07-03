@@ -101,7 +101,7 @@ open class Index {
     open func prefixSearch(_ prefix: String) -> [TokenIndexPair] {
         
         let normalizedPrefix = self.normalizedToken(prefix)
-        if normalizedPrefix.characters.count < 2 {
+        if normalizedPrefix.count < 2 {
             return [TokenIndexPair]() //don't return results under three chars (0, 1, 2).
         }
                 
@@ -117,8 +117,8 @@ open class Index {
         let sortedByLength = filtered.sorted() {
             (s1: String, s2: String) -> Bool in
             
-            let count1 = s1.characters.count
-            let count2 = s2.characters.count
+            let count1 = s1.count
+            let count2 = s2.count
             
             if count1 == count2 {
                 //now decide by alphabet
@@ -208,7 +208,7 @@ open class Index {
         //iterate through the string
         var newIndices = [IndexData]()
         
-        let range = string.characters.startIndex..<string.characters.endIndex
+        let range = string.startIndex..<string.endIndex
         let options = String.EnumerationOptions([.localized, .byWords])
         string.enumerateSubstrings(in: range, options: options) { (substring, substringRange, enclosingRange, stop) -> () in
             

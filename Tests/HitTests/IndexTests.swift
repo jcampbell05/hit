@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-@testable import hit
+@testable import Hit
 
 class IndexTests: HitTestCase {
 

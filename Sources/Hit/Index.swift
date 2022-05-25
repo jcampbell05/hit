@@ -110,7 +110,7 @@ open class Index {
         
         //filter the keys that match the prefix
         //we're using a fast trie here
-        let filtered = trieData.stringsMatchingPrefix(normalizedPrefix)
+        let filtered = trieData.strings(matching: normalizedPrefix)
         
         //now sort them by length (I think that makes sense for prefix search - shortest match is the best)
         //if two are of the same length, sort those two alphabetically
@@ -412,9 +412,3 @@ extension Dictionary {
         return one
     }
 }
-
-
-
-
-
-

@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-import hit
+import Hit
 
 class HitTestCase : XCTestCase {
     
@@ -34,10 +34,9 @@ class HitTestCase : XCTestCase {
     }
     
     func parseTestingData() throws -> [String: String] {
+        let jsonUrl = URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("reviewTestingData.json")
         
-        let jsonUrl = self.testingBundle().url(forResource: "reviewTestingData", withExtension: "json")
-        
-        let data = try Data(contentsOf: jsonUrl!, options: NSData.ReadingOptions())
+        let data = try Data(contentsOf: jsonUrl, options: NSData.ReadingOptions())
         let testingData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as! [String: String]
         
         return testingData

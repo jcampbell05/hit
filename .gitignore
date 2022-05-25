@@ -33,3 +33,6 @@ Pods/
 Carthage/Build
 
 fastlane/report.xml
+.build
+.swiftpm
+.DS_Store

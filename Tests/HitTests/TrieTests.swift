@@ -6,9 +6,8 @@
 //  Copyright (c) 2015 Honza Dvorsky. All rights reserved.
 //
 
-import UIKit
 import XCTest
-@testable import hit
+@testable import Hit
 
 class TrieTests: HitTestCase {
     
@@ -21,9 +20,9 @@ class TrieTests: HitTestCase {
         let strings = self.commonWords()
         let trie = Trie(strings: strings)
         
-        let foundStrings = trie.stringsMatchingPrefix("sw")
-        XCTAssert(foundStrings.index(of: "swiftkey") != nil, "Couldn't find 'swiftkey' in results")
-        XCTAssert(foundStrings.index(of: "swype") != nil, "Couldn't find 'swiftkey' in results")
+        let foundStrings = trie.strings(matching: "sw")
+        XCTAssert(foundStrings.firstIndex(of: "swiftkey") != nil, "Couldn't find 'swiftkey' in results")
+        XCTAssert(foundStrings.firstIndex(of: "swype") != nil, "Couldn't find 'swiftkey' in results")
     }
     
     
@@ -33,7 +32,7 @@ class TrieTests: HitTestCase {
         let resultTokens = trie.exportTrie()
         
         for token in tokens {
-            if resultTokens.index(of: token) == nil {
+            if resultTokens.firstIndex(of: token) == nil {
                 XCTFail("Didn't return token \(token)")
             }
         }
@@ -55,7 +54,7 @@ class TrieTests: HitTestCase {
         let trie = Trie(strings: tokens)
 
         self.measure { () -> Void in
-            _ = trie.stringsMatchingPrefix("sw")
+            _ = trie.strings(matching: "sw")
         }
     }
     
@@ -63,7 +62,7 @@ class TrieTests: HitTestCase {
         let strings = self.commonWords()
         let trie = Trie(strings: strings)
         
-        let foundStrings = Set(trie.stringsMatchingPrefix("s"))
+        let foundStrings = Set(trie.strings(matching: "s"))
         XCTAssertEqual(foundStrings.count, 3)
         XCTAssert(foundStrings.contains("swiftkey"))
         XCTAssert(foundStrings.contains("swype"))

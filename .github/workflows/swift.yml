@@ -28,8 +28,8 @@ jobs:
     timeout-minutes: 40
     runs-on: ${{ matrix.os }}
 
-  steps:
-    - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-    - name: Run `swift test`
-      run: swift test
+      - name: Run `swift test`
+        run: swift test

@@ -1,0 +1,12 @@
+--indent 4
+--indentcase false
+--trimwhitespace always
+--voidtype tuple
+--nospaceoperators ..<,...
+--ifdef noindent
+--stripunusedargs closure-only
+--maxwidth 120
+--wraparguments before-first
+--funcattributes prev-line
+--disable andOperator
+--swiftversion 4.1
